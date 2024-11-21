@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Thyroid Prediction</title>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      text-align: center;
+      margin: 20px;
+      background-color: #f0f8ff;
+      color: #333;
+    }
+
+    .form-container {
+      max-width: 600px;
+      margin: auto;
+      padding: 30px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      background-color: #ffffff;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 2.5em;
+      color: #2e3d58;
+      text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    input, button {
+      width: 90%;
+      padding: 12px;
+      margin: 10px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #007BFF;
+      color: white;
+      font-size: 1.2em;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #0056b3;
+    }
+
+    .result-container {
+      margin-top: 20px;
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #333;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      background-color: #f1f9ff;
+      transition: transform 0.3s ease;
+    }
+
+    .result-container.success {
+      background-color: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .result-container.failure {
+      background-color: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .result-container p {
+      margin: 0;
+      padding: 5px;
+    }
+
+    .animated-message {
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+  <h1>Thyroid Diagnosis Predictor</h1>
+  <div class="form-container">
+    <form id="prediction-form">
+      <!-- Form Inputs (features) -->
+      <label for="on_thyroxine">On Thyroxine (0 or 1):</label>
+      <input type="number" id="on_thyroxine" required><br>
+
+      <label for="query_on_thyroxine">Query On Thyroxine (0 or 1):</label>
+      <input type="number" id="query_on_thyroxine" required><br>
+
+      <label for="on_antithyroid_medication">On Antithyroid Medication (0 or 1):</label>
+      <input type="number" id="on_antithyroid_medication" required><br>
+
+      <label for="sick">Sick (0 or 1):</label>
+      <input type="number" id="sick" required><br>
+
+      <label for="pregnant">Pregnant (0 or 1):</label>
+      <input type="number" id="pregnant" required><br>
+
+      <label for="thyroid_surgery">Thyroid Surgery (0 or 1):</label>
+      <input type="number" id="thyroid_surgery" required><br>
+
+      <label for="I131_treatment">I131 Treatment (0 or 1):</label>
+      <input type="number" id="I131_treatment" required><br>
+
+      <label for="query_hypothyroid">Query Hypothyroid (0 or 1):</label>
+      <input type="number" id="query_hypothyroid" required><br>
+
+      <label for="query_hyperthyroid">Query Hyperthyroid (0 or 1):</label>
+      <input type="number" id="query_hyperthyroid" required><br>
+
+      <label for="lithium">Lithium (0 or 1):</label>
+      <input type="number" id="lithium" required><br>
+
+      <label for="goitre">Goitre (0 or 1):</label>
+      <input type="number" id="goitre" required><br>
+
+      <label for="tumor">Tumor (0 or 1):</label>
+      <input type="number" id="tumor" required><br>
+
+      <label for="hypopituitary">Hypopituitary (0 or 1):</label>
+      <input type="number" id="hypopituitary" required><br>
+
+      <label for="psych">Psych (0 or 1):</label>
+      <input type="number" id="psych" required><br>
+
+      <label for="TSH_measured">TSH Measured (0 or 1):</label>
+      <input type="number" id="TSH_measured" required><br>
+
+      <label for="T3_measured">T3 Measured (0 or 1):</label>
+      <input type="number" id="T3_measured" required><br>
+
+      <label for="TT4_measured">TT4 Measured (0 or 1):</label>
+      <input type="number" id="TT4_measured" required><br>
+
+      <label for="T4U_measured">T4U Measured (0 or 1):</label>
+      <input type="number" id="T4U_measured" required><br>
+
+      <label for="FTI_measured">FTI Measured (0 or 1):</label>
+      <input type="number" id="FTI_measured" required><br>
+
+      <label for="TBG_measured">TBG Measured (0 or 1):</label>
+      <input type="number" id="TBG_measured" required><br>
+
+      <label for="age">Age:</label>
+      <input type="number" id="age" required><br>
+
+      <label for="sex">Sex (0 for Female, 1 for Male):</label>
+      <input type="number" id="sex" required><br>
+
+      <label for="TSH">TSH Level:</label>
+      <input type="number" id="TSH" step="any" required><br>
+
+      <label for="T3">T3 Level:</label>
+      <input type="number" id="T3" step="any" required><br>
+
+      <label for="TT4">TT4 Level:</label>
+      <input type="number" id="TT4" step="any" required><br>
+
+      <label for="T4U">T4U Level:</label>
+      <input type="number" id="T4U" step="any" required><br>
+
+      <label for="FTI">FTI Level:</label>
+      <input type="number" id="FTI" step="any" required><br>
+
+      <label for="TBG">TBG Level:</label>
+      <input type="number" id="TBG" step="any" required><br>
+
+      <button type="submit">Predict</button>
+    </form>
+
+    <div id="result" class="result-container animated-message"></div>
+  </div>
+
+  <script>
+    const API_BASE_URL = "https://ci-goleproject.onrender.com";
+
+    document.getElementById('prediction-form').addEventListener('submit', async function(event) {
+        event.preventDefault();
+
+        const features = [];
+        const featureIds = [
+            'on_thyroxine', 'query_on_thyroxine', 'on_antithyroid_medication', 'sick', 'pregnant', 'thyroid_surgery', 
+            'I131_treatment', 'query_hypothyroid', 'query_hyperthyroid', 'lithium', 'goitre', 'tumor', 
+            'hypopituitary', 'psych', 'TSH_measured', 'T3_measured', 'TT4_measured', 'T4U_measured', 'FTI_measured', 
+            'TBG_measured', 'age', 'sex', 'TSH', 'T3', 'TT4', 'T4U', 'FTI', 'TBG'
+        ];
+
+        featureIds.forEach(id => {
+            const featureValue = parseFloat(document.getElementById(id).value);
+            features.push(featureValue);
+        });
+
+        try {
+            const response = await fetch(`${API_BASE_URL}/predict`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ features })
+            });
+
+            const data = await response.json();
+            const resultDiv = document.getElementById('result');
+            if (data.prediction === 'Thyroid disease detected') {
+                resultDiv.textContent = '🔴 Thyroid Disease Detected! 🔴';
+                resultDiv.classList.add('failure');
+                resultDiv.classList.remove('success');
+            } else {
+                resultDiv.textContent = '✅ No Thyroid Disease! ✅';
+                resultDiv.classList.add('success');
+                resultDiv.classList.remove('failure');
+            }
+        } catch (error) {
+            document.getElementById('result').textContent = 'Oops! Something went wrong... 😞';
+        }
+    });
+  </script>
+</body>
+</html>
